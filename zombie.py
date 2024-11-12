@@ -71,6 +71,6 @@ class Zombie:
                 self.width //= 2
                 self.height //= 2
                 self.y -= self.height // 2
-                print("Size reduced:", self.width, self.height)
+                print(f'zombie size : {self.width}, {self.height}')
             if self.ball_count == 2:
                 game_world.remove_object(self)
