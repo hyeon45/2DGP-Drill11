@@ -3,6 +3,7 @@
 from pico2d import get_time, load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, load_font, \
     draw_rectangle
 
+import play_mode
 from ball import Ball
 import game_world
 import game_framework
@@ -159,8 +160,10 @@ class Boy:
     def fire_ball(self):
         if self.ball_count > 0:
             self.ball_count -= 1
-            ball = Ball(self.x, self.y, self.face_dir*10)
-            game_world.add_object(ball)
+            ball = Ball(self.x, self.y, self.face_dir*10, is_fired=True)
+            play_mode.fired_balls.append(ball)
+            game_world.add_object(ball, 1)
+            game_world.add_collision_pair('zombie:ball', None, ball)
 
     def get_bb(self):
         # 하나의 튜플을 리턴하기 때문에 *가 필요함(각각의 개수로 나뉘게끔 하게 만드는 것)

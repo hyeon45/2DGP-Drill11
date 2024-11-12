@@ -5,10 +5,11 @@ import game_framework
 class Ball:
     image = None
 
-    def __init__(self, x = 400, y = 300, velocity = 1):
+    def __init__(self, x = 400, y = 300, velocity = 1, is_fired = False):
         if Ball.image == None:
             Ball.image = load_image('ball21x21.png')
         self.x, self.y, self.velocity = x, y, velocity
+        self.is_fired = is_fired
 
     def draw(self):
         self.image.draw(self.x, self.y)
@@ -26,4 +27,6 @@ class Ball:
     def handle_collision(self, group, other):
         # fill here
         if group == 'boy:ball':
+            game_world.remove_object(self)
+        if group == 'zombie:ball':
             game_world.remove_object(self)

@@ -34,6 +34,7 @@ class Zombie:
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1,1])
         self.ball_count = 0
+        self.width, self.height = 200, 200
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
@@ -48,9 +49,9 @@ class Zombie:
 
     def draw(self):
         if self.dir < 0:
-            Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x, self.y, 200, 200)
+            Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x, self.y, self.width, self.height)
         else:
-            Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y, 200, 200)
+            Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y, self.width, self.height)
 
         draw_rectangle(*self.get_bb())
 
@@ -58,14 +59,17 @@ class Zombie:
         pass
 
     def get_bb(self):
-        if self.ball_count == 0:
-            return self.x - 70, self.y - 100, self.x + 70, self.y + 80
-        elif self.ball_count == 1:
-            return self.x - 70/2, self.y - 100/2, self.x + 70/2, self.y + 80/2
+        if self.ball_count == 1:
+            return self.x - 70 // 2, self.y - 100 // 2, self.x + 70 // 2, self.y + 80 // 2
+
+        return self.x - 70, self.y - 100, self.x + 70, self.y + 80
 
     def handle_collision(self, group, other):
-        if group == 'zombie:ball':
+        if group == 'zombie:ball' and other.is_fired:
+            self.ball_count += 1
             if self.ball_count == 1:
-                pass
+                self.width //= 2
+                self.height //= 2
+                print("Size reduced:", self.width, self.height)
             if self.ball_count == 2:
                 game_world.remove_object(self)

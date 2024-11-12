@@ -1,5 +1,3 @@
-from os import remove
-
 world = [[] for _ in range(4)]
 collision_pairs = {}
 
